@@ -8,7 +8,7 @@ async function connect() {
         await client.connect();
         await client.db("admin").command({ping: 1});
         console.log("Connected successfully to server");
-        return client.db("admin");
+        return client;
 
     }catch (e) {
         
@@ -16,5 +16,13 @@ async function connect() {
         process.exit(1);
     }
 }
+async function getAllListings(client) {
+    const collection = await client.db("sample_airbnb").collection("listingsAndReviews");
+    let list = collection.find().toArray();
+    return list;
+}
+    function close(client) {
+        client.close();
+    }
 
-module.exports = {connect}
+module.exports = {connect, getAllListings, close}
